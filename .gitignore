@@ -1,0 +1,164 @@
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+*.env
+.venv/
+
+# Java
+*.class
+*.jar
+*.war
+*.ear
+*.nar
+*.car
+*.zip
+*.log
+*.junit.xml
+*.ser
+*.class
+*.swp
+*.DS_Store
+
+# Java Maven
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+
+# Java Gradle
+.gradle/
+build/
+
+# C#
+*.csproj.user
+*.csproj.DotSettings
+.vscode/
+.vscode-test/
+.vscode-test-explorer/
+.vscode-test-coverage/
+.vscode-test-results/
+bin/
+obj/
+
+# Go
+bin/
+pkg/
+vendor/
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+
+# Rust
+/target/
+/**/*.rs.bk
+**/*.rs.bk
+*.rs.bk
+
+# Ruby
+*.gem
+*.rbc
+.bundle
+.config
+coverage
+InstalledFiles
+pkg
+spec/reports
+test/tmp
+test/version_tmp
+tmp
+*.log
+
+# PHP
+vendor/
+*.log
+composer.lock
+
+# Swift
+.build/
+.swiftpm/xcode/
+Packages/
+.swift-version
+
+# Dart
+.dart_tool/
+.packages
+.pub/
+build/
+.idea/
+*.iml
+
+# Visual Studio Code
+.vscode/
+.history/
+.vscode-test/
+.vscode-test-explorer/
+.vscode-test-coverage/
+.vscode-test-results/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+lerna-debug.log*
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# OS-specific
+.DS_Store
+Thumbs.db
+
+# Docker
+Dockerfile
+*.dockerfile
+docker-compose.yml
+docker-compose.override.yml
+.dockerignore
+
+# Environment variables
+.env
+.env.*
+
+# Miscellaneous
+*.swp
+*.swo
+*~
+.idea/
+*.iml
+*.sublime-project
+*.sublime-workspace
+.project
+.classpath
+*.pydevproject
+*.cproject
+*.mymetadata
+*.tmp
+*.bak
+*.sav
+*.swo
+*.swn
+*.swp
+*.DS_Store
+*.vscode
