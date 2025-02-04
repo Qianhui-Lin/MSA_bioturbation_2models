@@ -21,7 +21,7 @@ def create_soil_profile():
     for i, layer_data in enumerate(data['layers'], start=1):
         # Add ID for soil layer
         layer_data['id'] = i
-        # Calculate bioturbation rate
+        # Calculate diffusion coefficient
         processed_layer = create_soil_layer(layer_data,h)
         if "error" in processed_layer:
             return jsonify(processed_layer), 400
@@ -111,7 +111,7 @@ def update_soil_profile(profile_id):
 def run_bioturbation():
     data = request.json
     profile_id = data["profile_id"]
-    dt = data.get("dt", 86400)/data.get("max_iter", 10000)
+    dt = data.get("dt",86400)
     tol = data.get("steady_state_tol", 1e-12)
     max_iter = data.get("max_iter", 10000)
 
@@ -166,6 +166,7 @@ def run_bioturbation():
         # Check steady-state
         if np.max(concentration_history[:, n]) - np.min(concentration_history[:, n]) <= tol:
             concentration_history = concentration_history[:, :n + 1]
+            print(f"Steady state reached at iteration: {n + 1}")
             break
     # Format results for insertion
     simulation_id = plotting_collection.count_documents({}) + 1
