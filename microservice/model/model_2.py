@@ -1,7 +1,9 @@
 from flask import Flask, request, jsonify
 from pymongo import MongoClient
 import numpy as np
+import os
 app = Flask(__name__)
+port = int(os.getenv("PORT", 5002))# Read port dynamically 
 
 # Connect to MongoDB
 client = MongoClient("mongodb://localhost:27017/")
@@ -111,7 +113,7 @@ def update_soil_profile(profile_id):
 def run_bioturbation():
     data = request.json
     profile_id = data["profile_id"]
-    dt = data.get("dt",86400)
+    dt = data.get("dt",86400)/86400
     tol = data.get("steady_state_tol", 1e-12)
     max_iter = data.get("max_iter", 10000)
 
@@ -123,7 +125,7 @@ def run_bioturbation():
     depths = [layer['depth'] for layer in layers]
     initial_conc = [layer['conc'] for layer in layers]
     diffusion_coeffs = [layer['diffusion_coefficient'] for layer in layers]
-    Nx = 100  # Number of spatial grid points
+    Nx = 10  # Number of spatial grid points
     Dx = sum(depths) / Nx
     Nt = max_iter
 
@@ -187,4 +189,4 @@ def run_bioturbation():
     return jsonify({"message": "Simulation completed", "simulation_id": simulation_id}), 201
 
 if __name__ == '__main__':
-    app.run(debug=True,port=5002)
+    app.run(debug=True,port=port)

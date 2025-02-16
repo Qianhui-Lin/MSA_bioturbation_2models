@@ -1,11 +1,12 @@
 import requests
 import json
 import sys
+import os
 
 # URLs for the services
-MODEL1_SERVICE_URL = "http://localhost:5001/"
-MODEL2_SERVICE_URL = "http://localhost:5002/"
-PLOTTING_SERVICE_URL = "http://localhost:5003/plot"
+MODEL1_SERVICE_URL = os.getenv("MODEL1_SERVICE_URL", "http://localhost:5001/")
+MODEL2_SERVICE_URL = os.getenv("MODEL2_SERVICE_URL", "http://localhost:5002/")
+PLOTTING_SERVICE_URL = os.getenv("PLOTTING_SERVICE_URL", "http://localhost:5003/plot")
 
 def main(config_file):
     """

@@ -2,11 +2,12 @@ from flask import Flask, request, jsonify
 from pymongo import MongoClient
 import requests
 import numpy as np
+import os
 
 app = Flask(__name__)
 #soil_layers = {}  # In-memory storage 
 #soil_profiles = {}  # In-memory storage 
-
+port = int(os.getenv("PORT", 5001))# Read port dynamically 
 # Connect to MongoDB
 client = MongoClient("mongodb://localhost:27017/")
 soil_db = client['soil_database']
@@ -191,4 +192,4 @@ def run_bioturbation():
 
 
 if __name__ == '__main__':
-    app.run(debug=True,port=5001)
+    app.run(debug=True,port=port)

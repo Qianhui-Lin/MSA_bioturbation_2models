@@ -6,6 +6,7 @@ from flask import Flask, request, jsonify, send_file
 import io
 import os
 app = Flask(__name__)
+port = int(os.getenv("PORT", 5003))# Read port dynamically 
 
 client = MongoClient("mongodb://localhost:27017/")
 soil_db = client['soil_database']
@@ -77,4 +78,4 @@ def plot():
         return jsonify({"error": "An unexpected error occurred"}), 500
     
 if __name__ == "__main__":
-    app.run(debug=True, port=5003)
+    app.run(debug=True, port=port)
