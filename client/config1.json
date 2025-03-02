@@ -1,0 +1,14 @@
+{
+    "model": "Model1",
+    "layers": [
+        {"depth": 0.1, "initial_conc": 4e-9, "earthworm_density": 20, "beta": 1e-8},
+        {"depth": 0.1, "initial_conc": 0, "earthworm_density": 20, "beta": 1e-8},
+        {"depth": 0.1, "initial_conc": 0, "earthworm_density": 20, "beta": 1e-8},
+        {"depth": 0.1, "initial_conc": 0, "earthworm_density": 20, "beta": 1e-8}
+    ],
+    "steady_state_tol": 1e-12,
+    "dt": 86400,
+    "max_iter": 10000,
+    "h": 0.2
+
+}
