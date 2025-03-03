@@ -15,6 +15,10 @@ plotting_db = client['plotting_database']
 soil_profiles_collection = soil_db['soil_profiles']
 plotting_collection = plotting_db['plotting']
 
+# Figures will be saved to the plots directory
+PLOTS_DIR = os.path.join(os.getcwd(), "plots")
+os.makedirs(PLOTS_DIR, exist_ok=True)
+
 def get_data_by_simulation_id(simulation_id):
     """Retrieve data from the database by simulation_id."""
     record = plotting_collection.find_one({"simulation_id": simulation_id})
@@ -65,7 +69,7 @@ def plot():
         buffer.seek(0)
 
         unique_filename = f"bioturbation_plot_{simulation_id}.png"
-        file_path = os.path.join(os.getcwd(), unique_filename)
+        file_path = os.path.join(PLOTS_DIR, unique_filename)
         with open(file_path, 'wb') as f:
             f.write(buffer.read())
         print("Plot generated and saved")
