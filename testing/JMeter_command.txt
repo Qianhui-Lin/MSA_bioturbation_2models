@@ -1,0 +1,3 @@
+jmeter -n -t /Users/qianhuilin/Documents/MSA_bioturbation_2models/testing/MSA_testing_plan.jmx \
+-l /Users/qianhuilin/Documents/MSA_bioturbation_2models/testing/results.jtl \
+-e -o /Users/qianhuilin/Documents/MSA_bioturbation_2models/testing/report
