@@ -6,7 +6,7 @@ python microservice/plotting/plotting.py
 ### Pass data to orchestrator
 python orchestrator/bioturbation_orchestrator.py client/config.json
 
-
+python orchestrator/bioturbation_orchestrator_multiple.py client/config_multiple.json
 
 ### Initialize database
 
