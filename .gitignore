@@ -17,6 +17,8 @@ env.bak/
 venv.bak/
 *.env
 .venv/
+*.json 
+*.png
 
 # Java
 *.class

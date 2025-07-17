@@ -1,0 +1,33 @@
+# Use a lightweight Python base image
+FROM python:3.10-slim
+
+# Set environment variables
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+
+# Install system dependencies needed by Kaleido (for Plotly image export)
+RUN apt-get update && apt-get install -y \
+    libglib2.0-0 \
+    libsm6 \
+    libxrender1 \
+    libxext6 \
+    libexpat1 \
+    fonts-dejavu-core \
+    && rm -rf /var/lib/apt/lists/*
+
+# Create app directory
+WORKDIR /app
+
+# Copy requirements and install
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy ONLY the plotting microservice code into the container
+COPY microservice/plotting/plotting_aws.py .
+#COPY microservice/plotting/plots ./plots
+
+# Expose plotting service port
+EXPOSE 5003
+
+# Run the plotting microservice
+CMD ["python", "plotting_aws.py"]
