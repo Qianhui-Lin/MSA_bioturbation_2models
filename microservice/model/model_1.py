@@ -1,3 +1,4 @@
+import datetime
 from flask import Flask, request, jsonify
 from pymongo import MongoClient
 import requests
@@ -7,18 +8,30 @@ import os
 app = Flask(__name__)
 #soil_layers = {}  # In-memory storage 
 #soil_profiles = {}  # In-memory storage 
-port = int(os.getenv("PORT", 5001))# Read port dynamically 
+#port = int(os.getenv("PORT", 5001))# Read port dynamically 
 # Connect to MongoDB
-client = MongoClient("mongodb://localhost:27017/")
+#client = MongoClient("mongodb://localhost:27017/") local tetsing
+#client = MongoClient("mongodb://host.docker.internal:27017/") localtesting with docker
+# monogodb atlas
+mongo_uri = os.getenv("MONGO_URI", "mongodb://localhost:27017/")
+client = MongoClient(mongo_uri)
+
 soil_db = client['soil_database']
 plotting_db = client['plotting_database']
 #soil_layers_collection = db['soil_layers']
 soil_profiles_collection = soil_db['soil_profiles']
 plotting_collection = plotting_db['plotting']
 
+@app.route('/model', methods=['GET'])
+def health_check():
+    return jsonify({"status": "Model_1 Microservice is running"}), 200
+
+
 # Create soil profile
-@app.route('/soil-profile', methods=['POST'])
+@app.route('/model/soil-profile', methods=['POST'])
 def create_soil_profile():
+    #request_start_time = datetime.utcnow()
+    #print(f"[Server] /soil-profile received at {request_start_time.isoformat()}Z")
     data = request.json
     profile_id = soil_profiles_collection.count_documents({}) + 1
     data['profile'] = {"id": profile_id}
@@ -59,7 +72,7 @@ def create_soil_layer(layer_data):
     }
 
 # Get soil profile by ID
-@app.route('/soil-profile/<int:profile_id>', methods=['GET'])
+@app.route('/model/soil-profile/<int:profile_id>', methods=['GET'])
 def get_soil_profile(profile_id):
     profile = soil_profiles_collection.find_one({"profile.id": profile_id})
     if not profile:
@@ -70,7 +83,7 @@ def get_soil_profile(profile_id):
     return jsonify(profile), 200
 
 # Delete soil profile data by ID
-@app.route('/soil-profile/<int:profile_id>', methods=['DELETE'])
+@app.route('/model/soil-profile/<int:profile_id>', methods=['DELETE'])
 def delete_soil_profile(profile_id):
     result = soil_profiles_collection.delete_one({"profile.id": profile_id})
 
@@ -80,7 +93,7 @@ def delete_soil_profile(profile_id):
     return jsonify({"message": "Profile deleted successfully"}), 200
 
 # Update soil profile by ID 
-@app.route('/soil-profile/<int:profile_id>', methods=['PUT'])
+@app.route('/model/soil-profile/<int:profile_id>', methods=['PUT'])
 def update_soil_profile(profile_id):
     data = request.json
 
@@ -126,22 +139,23 @@ def bioturbation(soil_layers, dt):
             soil_layers[l + 1]["conc"] -= delta
 
 
-def equal(lst, tol=1e-12):
+def equal(lst, tol=1e-10):
     """
     Check if the concentrations in the list are equal within the specified tolerance.
     """
     return abs(max(lst) - min(lst)) < tol
 
 
-@app.route('/bioturbation/run', methods=['POST'])
+@app.route('/model/bioturbation/run', methods=['POST'])
 def run_bioturbation():
+    #print(f"[Server] /bioturbation/run received at {datetime.utcnow().isoformat()}Z")
     """
     Perform bioturbation calculations for the specified soil profile.
     """
     data = request.json
     profile_id = data["profile_id"]
     dt = data.get("dt", 86400)
-    tol = data.get("steady_state_tol", 1e-12)
+    tol = data.get("steady_state_tol", 1e-10)
     max_iter = data.get("max_iter", 10000)
 
     # Fetch the soil profile from MongoDB
@@ -164,8 +178,8 @@ def run_bioturbation():
         t += 1
         time_steps.append(t)
 
-        if t > max_iter:
-            return jsonify({"error": "Steady state not reached after max iterations"}), 400
+        #if t > max_iter:
+            #return jsonify({"error": "Steady state not reached after max #iterations"}), 400
 
     # Preparing the data for inserting plotting db
     simulation_id = plotting_collection.count_documents({}) + 1
@@ -191,5 +205,7 @@ def run_bioturbation():
     }), 201
 
 
-if __name__ == '__main__':
+#if __name__ == '__main__':
     app.run(debug=True,port=port)
+if __name__ == '__main__':
+    app.run(debug=True, host='0.0.0.0', port=5001)
