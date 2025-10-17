@@ -163,4 +163,5 @@ docker-compose.override.yml
 *.swn
 *.swp
 *.DS_Store
-*.vscode
+*.vscode\
+.csv
