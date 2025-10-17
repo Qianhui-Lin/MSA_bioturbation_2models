@@ -7,7 +7,7 @@ import time
 
 # URLs for the services
 #MODEL1_SERVICE_URL = os.getenv("MODEL1_SERVICE_URL", "http://localhost:5001/")
-BASE_ALB_URL = os.getenv("BASE_ALB_URL", "http://bioturbation-alb-new-1479378295.eu-west-2.elb.amazonaws.com")
+BASE_ALB_URL = os.getenv("BASE_ALB_URL", "http://bioturbation-alb-ms-1194161411.eu-west-2.elb.amazonaws.com")
 MODEL1_SERVICE_URL = f"{BASE_ALB_URL}/model"
 PLOTTING_SERVICE_URL=f"{BASE_ALB_URL}/plotting"
 MODEL2_SERVICE_URL = os.getenv("MODEL2_SERVICE_URL", "http://localhost:5002/")
@@ -44,7 +44,7 @@ def main(config_file):
             print("Details:", profile_response.json())
             sys.exit(1)
         
-        profile_id = profile_response.json().get("id")
+        profile_id = profile_response.json().get("profile_id")
         print(f"Successfully created soil profile. Profile ID: {profile_id}")
 
         #print("Running bioturbation...")
@@ -88,14 +88,20 @@ def main(config_file):
 
         # Get the download URL from the plotting service response
         download_url = plotting_response.json().get("download_url")
+        filename = plotting_response.json().get("filename")
         if not download_url:
             print("Error: No download URL returned from plotting service.")
             sys.exit(1)
         
+        if not filename:
+            filename = f"bioturbation_plot_{simulation_id}.png"
+            print(f"Warning: No filename returned from plotting service. Using default: {filename}")
+
+        
         # Set target directory (relative to orchestrator script)
         output_dir = os.path.join("microservice", "plotting", "plots")
         os.makedirs(output_dir, exist_ok=True)
-        output_path = os.path.join(output_dir, f"bioturbation_plot_{simulation_id}_{uuid.uuid4().hex}.png")
+        output_path = os.path.join(output_dir,os.path.basename(filename))
 
         # Download the image to local machine
         #output_path = f"bioturbation_plot_{simulation_id}.png"
