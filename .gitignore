@@ -165,3 +165,5 @@ docker-compose.override.yml
 *.DS_Store
 *.vscode\
 *.csv
+*.jtl
+*.jmx
